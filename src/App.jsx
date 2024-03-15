@@ -1,13 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NewTodoForm } from './NewTodoForm'
-import { Todolist } from './TofoList';
+import { TodoList } from './TodoList';
 
 
-function App() {
+export default function  App() {
  
-  const [todos, setTodos] = useState([]) // array of todos
+  const [todos, setTodos] = useState(() => {
+    const localValue = localStorage.getItem("ITEMS");
+    //console.log(localValue)
+    if(localValue == null)  {
+      return []
+    } else {
+         return JSON.parse(localValue) 
+    }
+  }) // array of todos
  
-
+    useEffect(() => {  //any time when todo arra todos is changed is called this func
+      localStorage.setItem("ITEM", JSON.stringify(todos));
+    }, [todos])
+  
   function addTodo(title) {
     setTodos((currentTodos) => {
       return [...currentTodos, {
@@ -42,12 +53,10 @@ function App() {
     <>
     <NewTodoForm onSubmit={addTodo} />
     <h1 className='header'>Todo List</h1>
-    <Todolist todos={todos}
+    <TodoList todos={todos}
               toggleTodo={toggleTodo}
               deleteTodo={deleteTodo}
               />
   </>
   )
 }
-
-export default App
