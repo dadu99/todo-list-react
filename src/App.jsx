@@ -1,22 +1,23 @@
 import { useState } from 'react'
+import { NewTodoForm } from './NewTodoForm'
+import { Todolist } from './TofoList';
 
 
 function App() {
-  const [newItem, setNewItem] = useState("") // initial state
+ 
   const [todos, setTodos] = useState([]) // array of todos
-  
-  function handleSubmit(e) {
-    e.preventDefault()
+ 
+
+  function addTodo(title) {
     setTodos((currentTodos) => {
       return [...currentTodos, {
         id: crypto.randomUUID(), 
-        title: newItem, 
+        title: title, 
         completed: false
       },
       ]
-    });
 
-    setNewItem("")
+    });
   }
 
   function toggleTodo(id, completed) {
@@ -36,44 +37,15 @@ function App() {
     })
   }
 
-      // console.log(todos);
+      //console.log(todos);
   return (
     <>
-        <form onSubmit={handleSubmit} className='new-item-form'>
-          <div className='form-row'>
-            <label htmlFor='item'>New Item</label>
-            <input value={newItem} 
-                   onChange={e => setNewItem(e.target.value)} 
-                   type='text' 
-                   id='item'>
-            </input>
-          </div>
-
-          <button className='btn'>Add</button>
-        </form>
-
+    <NewTodoForm onSubmit={addTodo} />
     <h1 className='header'>Todo List</h1>
-    <ul className='list'>
-      {todos.length === 0 && 'No items yet'}
-      {todos.map(todo => {
-        return (
-           <li key={todo.id}>
-            <label>
-              <input 
-                type='checkbox' 
-                checked={todo.completed} 
-                onChange={e => toggleTodo(todo.id, e.target.checked)} 
-                /> 
-              {todo.title}
-            </label>
-            <button className='btn btn-danger' 
-                    onClick={() => deleteTodo(todo.id)}>
-                      Delete
-            </button>
-          </li>  
-        )
-      })}
-    </ul>
+    <Todolist todos={todos}
+              toggleTodo={toggleTodo}
+              deleteTodo={deleteTodo}
+              />
   </>
   )
 }
