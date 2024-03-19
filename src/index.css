@@ -88,6 +88,7 @@ body {
 
 .list li {
   display: flex;
+  padding: 17px;
   gap: 0.5rem;
   align-items: center;
 }
